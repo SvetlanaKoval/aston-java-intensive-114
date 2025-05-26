@@ -29,7 +29,18 @@ class SimpleHashMapTest {
     }
 
     @Test
-    public void testPutNullKey() {
+    public void testPutAndGetNullKey() {
+        SimpleHashMap<String, Integer> map = fillMap();
+        int size = map.size();
+
+        map.put(null, 111);
+
+        assertEquals(size + 1, map.size());
+        assertEquals(111, map.get(null));
+    }
+
+    @Test
+    public void testPutNullKeyAndOverwriteNullValue() {
         SimpleHashMap<String, Integer> map = fillMap();
         int size = map.size();
 
@@ -37,6 +48,11 @@ class SimpleHashMapTest {
 
         assertEquals(size + 1, map.size());
         assertNull(map.get(null));
+
+        map.put(null, 111);
+
+        assertEquals(size + 1, map.size());
+        assertEquals(111, map.get(null));
     }
 
     @Test
@@ -57,6 +73,16 @@ class SimpleHashMapTest {
         assertEquals(size - 1, map.size());
         assertEquals(80, oldValue);
         assertNull(map.get("a"));
+    }
+
+    @Test
+    public void testRemoveIfNull() {
+        SimpleHashMap<String, Integer> map = fillMap();
+        map.put(null, 111);
+
+        int oldValue = map.remove(null);
+
+        assertEquals(111, oldValue);
     }
 
     @Test

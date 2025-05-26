@@ -1,5 +1,7 @@
 package ru.aston.intensive.collections;
 
+import java.util.Objects;
+
 public class SimpleHashMap<K, V> {
 
     static final int DEFAULT_INITIAL_CAPACITY = 1 << 4;
@@ -39,17 +41,17 @@ public class SimpleHashMap<K, V> {
         Node<K, V> firstNode;
         Node<K, V> nextNode;
         int hashKey = hash(key);
-        if (buckets == null || (firstNode = buckets[getBucketIndex(key)]) == null || key == null) {
+        if (buckets == null || (firstNode = buckets[getBucketIndex(key)]) == null) {
             return null;
         }
 
-        if (hash(firstNode.key) == hashKey && firstNode.key.equals(key)) {
+        if (hash(firstNode.key) == hashKey && Objects.equals(firstNode.key, key)) {
             return firstNode.value;
         }
 
         if ((nextNode = firstNode.next) != null) {
             do {
-                if (hash(nextNode.key) == hashKey && nextNode.key.equals(key)) {
+                if (hash(nextNode.key) == hashKey && Objects.equals(nextNode.key, key)) {
                     return nextNode.value;
                 }
             }
@@ -72,7 +74,7 @@ public class SimpleHashMap<K, V> {
 
         Node<K, V> currentNode = null;
         while (node != null) {
-            if (node.key.equals(key)) {
+            if (Objects.equals(node.key, key)) {
                 V oldValue = node.value;
                 node.value = value;
                 return oldValue;
@@ -138,7 +140,7 @@ public class SimpleHashMap<K, V> {
         int keyIndex = getBucketIndex(key);
         Node<K, V> node;
         if ((node = buckets[keyIndex]) != null) {
-            if (node.key.equals(key)) {
+            if (Objects.equals(node.key, key)) {
                 if (node.next != null) {
                     buckets[keyIndex] = node.next;
                 } else {
@@ -149,7 +151,7 @@ public class SimpleHashMap<K, V> {
             } else {
                 while (node.next != null) {
                     Node<K, V> nextNode = node.next;
-                    if (nextNode.key.equals(key)) {
+                    if (Objects.equals(nextNode.key, key)) {
                         node.next = nextNode.next;
                         --size;
                         return nextNode.value;
